@@ -1,46 +1,43 @@
 # Localization
 
-String localization in JavaScript.
+[API documentation](https://recoyx.github.io/jslibs/MsgLocalization)
+
+Message localization for JavaScript.
 
 Features:
 - Supports loading text resources from HTTP (Web Browser and Node.js) and File System (Node.js).
-- Basic language information and settings
+- Basic language data
 
 ## Examples
 
 ```javascript
-import { LocaleMap, Gender, parseLocale } from 'com.recoyxgroup.localization';
+import { MsgLocalization, Gender, PluralRuleSelector, parseLocale } from 'com.recoyxgroup.msglocalization';
 
-const localeMap = new LocaleMap({
-    // Set of supported Locales.
-    // NOTE that the strings here indicate where
-    // the assets are located.
-    supportedLocales: ['en-US', 'en-GB', 'ja', 'pt-BR'],
+const localization = new MsgLocalization({
+    supportsLocales: ['en-US', 'en-GB', 'ja', 'pt-BR'],
     defaultLocale: 'en-US',
     fallbacks: {
         'pt-BR': 'en-US',
         'en-GB': ['ja', 'pt-BR']
     },
     assets: {
-        // assets URL or path
         src: 'path/to/res/lang',
-        // asset JSON files
-        // - NOTE: slash works here
-        baseFileNames: ['common'],
-        // whether to clean assets automatically on locale switch
-        autoClean: true,
+        files: ['common'],
+        cleanUnusedAssets: true,
         // 'fileSystem', 'http'
-        loaderType: 'fileSystem',
+        loadAssetsVia: 'fileSystem',
     },
 });
 
 (async () => {
-    await localeMap.load();
-    const t = localeMap.get.bind(localeMap);
+    // Promise<boolean>
+    await localization.load();
+
+    const t = localization.t.bind(localization);
     console.log(t('common.messageId'));
     console.log(t('common.parameterized', { x: 'foo' }));
-    console.log(t('common.contextual', Gender.MALE));
-    console.log(t('common.qty', 10));
+    console.log(t('common.contextual', Gender.FEMALE));
+    console.log(t('common.qty', new PluralRuleSelector(new Intl.PluralRules(localization.currentLocaleSequenceStr), 10)));
 })();
 ```
 
@@ -52,8 +49,8 @@ Example assets:
     "parameterized": "Here: $x",
     "contextualMale": "Male message",
     "contextualFemale": "Female message",
-    "qtyEmpty": "$amount: empty",
-    "qtySingle": "$amount: single",
-    "qtyPlural": "$amount: plural"
+    "qtyZero": "$number: zero",
+    "qtyOne": "$number: one",
+    "qtyOther": "$number: other"
 }
 ```

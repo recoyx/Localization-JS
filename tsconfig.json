@@ -5,10 +5,14 @@
         "downlevelIteration": true,
         "target": "ES2015",
         "moduleResolution": "Node",
-        "outFile": "dist/Localization.js"
+        "outFile": "dist/MsgLocalization.js"
     },
     "exclude": [
         "./test/",
         "./dist/"
-    ]
+    ],
+    "typedocOptions": {
+        "entryPoints": ["src/MsgLocalization.d.ts"],
+        "out": "docs"
+    }
 }

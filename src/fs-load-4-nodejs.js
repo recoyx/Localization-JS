@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-export default function loader(resPath) {
+export default function load(resPath) {
     return new Promise((resolve, reject) => {
         fs.readFile(resPath, 'utf8', function(error, data) {
             if (!error)

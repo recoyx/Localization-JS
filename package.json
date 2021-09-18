@@ -1,11 +1,12 @@
 {
-  "name": "com.recoyxgroup.localization",
-  "version": "2.0.2",
-  "description": "Localization",
-  "main": "src/lib.js",
+  "name": "com.recoyxgroup.msglocalization",
+  "version": "3.0.0",
+  "description": "Message localization library",
+  "main": "src/MsgLocalization.js",
   "scripts": {
-    "test": "mocha -r ts-node/register 'test/**/*.ts'"
+    "test": "node --experimental-modules test/test.mjs"
   },
+  "type": "module",
   "keywords": [
     "localization",
     "internationalization",
@@ -15,9 +16,9 @@
     "i18n"
   ],
   "author": "Klaider",
-  "repository": "https://github.com/recoyx/Localization-js",
+  "repository": "https://github.com/recoyx/MsgLocalization-js",
   "license": "ISC",
-  "typings": "./src/lib.d.ts",
+  "typings": "./src/MsgLocalization.d.ts",
   "dependencies": {
     "axios": "^0.21.0",
     "country-iso-2-to-3": "^1.1.0",
@@ -27,16 +28,13 @@
     "language-tags": "^1.0.5"
   },
   "browser": {
-    "src/FSLoader4NodeJS.js": "src/FSLoader4Browser.js"
+    "src/fs-load-4-nodejs.js": "src/fs-load-4-browser.js"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.15",
     "@types/language-tags": "^1.0.0",
-    "@types/mocha": "^8.2.1",
     "@types/node": "^14.14.32",
-    "chai": "^4.3.3",
-    "mocha": "^8.3.1",
     "ts-node": "^9.1.1",
+    "typedoc": "^0.22.4",
     "typescript": "^4.2.3"
   }
 }
