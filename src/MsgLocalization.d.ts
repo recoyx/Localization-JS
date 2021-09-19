@@ -16,7 +16,7 @@ import { EventTarget } from 'event-target-shim';
  * Special formatting such as date-time and relative-time is done with
  * the ECMAScript [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl) namespace.
  * As a facility it is possible to get a sequence with the current locale together with its fallbacks via the
- * `localization.currentLocaleSequence()` method.
+ * `localization.currentLocaleSequence` property.
  * 
  */
 export class MsgLocalization extends EventTarget {
@@ -58,6 +58,8 @@ export class MsgLocalization extends EventTarget {
     reflectOptions(): LocalizationOptions;
     clone(): MsgLocalization;
 }
+
+export type TFunction = (id: string, ...options: (number | Gender | PluralRuleSelector | Object)[]) => string;
 
 export class PluralRuleSelector {
     constructor(format: Intl.PluralRules, value: number);
