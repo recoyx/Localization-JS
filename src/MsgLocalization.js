@@ -189,7 +189,7 @@ export class MsgLocalization extends EventTarget {
         return this._currentLocale;
     }
 
-    get currentLocaleSequence() {
+    get currentLocaleSeq() {
         if (this._currentLocale == null) {
             return [];
         }
@@ -204,8 +204,8 @@ export class MsgLocalization extends EventTarget {
         return r;
     }
 
-    get currentLocaleSequenceStr() {
-        return this.currentLocaleSequence.map(l => l.toString());
+    get currentLocaleSeqStr() {
+        return this.currentLocaleSeq.map(l => l.toString());
     }
 
     async load(newLocale = null) {
@@ -295,35 +295,24 @@ export class MsgLocalization extends EventTarget {
 
     t(id, ...options) {
         let vars = null;
-        let gender = null;
-        let pluralRuleSelector = null;
 
         for (let option of options) {
-            if (option instanceof Gender) {
-                gender = option;
-            } else if (option instanceof PluralRuleSelector) {
-                pluralRuleSelector = option;
+            if (typeof option == 'string') {
+                id += option.slice(0, 1).toUpperCase() + option.slice(1).toLowerCase();
             } else if (!!option && option instanceof Map) {
                 vars = vars || {};
                 for (let k in option) {
-                    vars.set(k, option instanceof Intl.DateTimeFormat ? option : String(option[k]));
+                    vars.set(k, String(option[k]));
                 }
             } else if (!!option && option.constructor == Object) {
                 vars = vars || {};
                 for (let k in option) {
-                    vars[k] = option instanceof Intl.DateTimeFormat ? option : String(option[k]);
+                    vars[k] = String(option[k]);
                 }
             }
         }
 
         vars = vars == null ? {} : vars;
-
-        if (gender != null) id += gender == Gender.FEMALE ? 'Female' : gender == Gender.MALE ? 'Male' : 'Other';
-        if (pluralRuleSelector) {
-            let pluralRule = pluralRuleSelector.format.select(pluralRuleSelector.valueOf());
-            id += pluralRule.charAt(0).toUpperCase() + pluralRule.slice(1);
-            vars.number = pluralRuleSelector.valueOf();
-        }
 
         if (!this._currentLocale) {
             return id;
@@ -390,17 +379,6 @@ export class MsgLocalization extends EventTarget {
     }
 }
 
-export class PluralRuleSelector {
-    constructor(format, value) {
-        this.format = format;
-        this._value = value;
-    }
-
-    valueOf() {
-        return this._value;
-    }
-}
-
 export class LocaleEvent {
     constructor(type) {
         this._type = type;
@@ -410,25 +388,3 @@ export class LocaleEvent {
         return this._type;
     }
 }
-
-export class Gender {
-    constructor(str) {
-        this._str = '';
-        if (!Gender._constructable) {
-            throw new Error('Illegal constructor for Gender.');
-        }
-        this._str = str;
-    }
-
-    toString() {
-        return this._str;
-    }
-}
-
-Gender._constructable = true;
-
-Gender.FEMALE = new Gender('female');
-Gender.MALE = new Gender('male');
-Gender.OTHER = new Gender('other');
-
-Gender._constructable = false;

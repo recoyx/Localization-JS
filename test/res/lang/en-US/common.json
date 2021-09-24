@@ -1,8 +1,8 @@
 {
     "messageId": "Some message",
     "parameterized": "Here: $x",
-    "contextualMale": "Male message",
-    "contextualFemale": "Female message",
+    "contextualMaleOther": "Male message",
+    "contextualFemaleOther": "Female message",
     "qtyZero": "Zero ($number)",
     "qtyOne": "One ($number)",
     "qtyOther": "Other ($number)"

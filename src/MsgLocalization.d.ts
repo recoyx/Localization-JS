@@ -16,7 +16,7 @@ import { EventTarget } from 'event-target-shim';
  * Special formatting such as date-time and relative-time is done with
  * the ECMAScript [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl) namespace.
  * As a facility it is possible to get a sequence with the current locale together with its fallbacks via the
- * `localization.currentLocaleSequence` property.
+ * `localization.currentLocaleSeq` property.
  * 
  */
 export class MsgLocalization extends EventTarget {
@@ -28,9 +28,9 @@ export class MsgLocalization extends EventTarget {
 
     readonly currentLocale: Locale | null;
 
-    readonly currentLocaleSequence: Locale[];
+    readonly currentLocaleSeq: Locale[];
 
-    readonly currentLocaleSequenceStr: string[];
+    readonly currentLocaleSeqStr: string[];
 
     /**
      * Attempts to load a locale. The method returns `false` and keeps the property `currentLocale` intact if it fails loading messages,
@@ -43,31 +43,18 @@ export class MsgLocalization extends EventTarget {
     /**
      * Translates message with optional formatting options. See {@link MsgLocalization} for details regarding message assets.
      * 
-     * When a {@link PluralRuleSelector} option is specified, it determines the primary plural rule.
-     * It will append either `Zero`, `One`, `Two`, `Few`, `Many` or `Other` to the message ID and assign the `number` variable.
-     * 
-     * When a {@link Gender} option is specified, it will append either `Female`, `Male` or `Other` to the message ID.
+     * When a string option is passed, it is converted to the `Xxx` form and the method appends it to the identifier.
+     * Multiple string options may be passed, where the method appends in sequence order.
      *
      * When an object or `Map` is specified, it assigns variables to the message.
-     * Supported variable data types include anything that converts to string and ECMAScript [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat).
-     *
-     * If both a {@link PluralRuleSelector} and a {@link Gender} are specified, the Gender precedes the PluralRuleSelector; for example, `msgIdFemaleTwo`.
     */
-    t(id: string, ...options: (number | Gender | PluralRuleSelector | Object)[]): string;
+    t(id: string, ...options: (string | Object)[]): string;
 
     reflectOptions(): LocalizationOptions;
     clone(): MsgLocalization;
 }
 
-export type TFunction = (id: string, ...options: (number | Gender | PluralRuleSelector | Object)[]) => string;
-
-export class PluralRuleSelector {
-    constructor(format: Intl.PluralRules, value: number);
-
-    readonly format: Intl.PluralRules;
-
-    valueOf(): number;
-}
+export type TFunction = (id: string, ...options: (string | Object)[]) => string;
 
 export declare class LocaleEvent {
     constructor(type: string);
@@ -88,14 +75,6 @@ export type LocalizationAssetOptions = {
     cleanUnusedAssets?: boolean,
     loadAssetsVia?: 'http' | 'fileSystem';
 };
-
-export class Gender {
-    static readonly MALE: Gender;
-    static readonly FEMALE: Gender; 
-    static readonly OTHER: Gender;
-
-    toString(): string;
-}
 
 export class Locale {
     readonly standardTag: LanguageTags.Tag;

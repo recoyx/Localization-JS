@@ -11,7 +11,7 @@ Features:
 ## Examples
 
 ```javascript
-import { MsgLocalization, Gender, PluralRuleSelector, parseLocale } from 'com.recoyxgroup.msglocalization';
+import { MsgLocalization, parseLocale } from 'com.recoyxgroup.msglocalization';
 
 const localization = new MsgLocalization({
     supportsLocales: ['en-US', 'en-GB', 'ja', 'pt-BR'],
@@ -36,8 +36,8 @@ const localization = new MsgLocalization({
     const t = localization.t.bind(localization);
     console.log(t('common.messageId'));
     console.log(t('common.parameterized', { x: 'foo' }));
-    console.log(t('common.contextual', Gender.FEMALE));
-    console.log(t('common.qty', new PluralRuleSelector(new Intl.PluralRules(localization.currentLocaleSequenceStr), 10)));
+    console.log(t('common.contextual', 'female', 'two'));
+    console.log(t('common.qty', { number: 10 }, new Intl.PluralRules(localization.currentLocaleSeqStr).select(10)));
 })();
 ```
 
@@ -47,8 +47,10 @@ Example assets:
 {
     "messageId": "Some message",
     "parameterized": "Here: $x",
-    "contextualMale": "Male message",
-    "contextualFemale": "Female message",
+    "contextualMaleOne": "Male message",
+    "contextualFemaleOne": "Female message",
+    "contextualMaleTwo": "Male message (2)",
+    "contextualFemaleTwo": "Female message (2)",
     "qtyZero": "$number: zero",
     "qtyOne": "$number: one",
     "qtyOther": "$number: other"
